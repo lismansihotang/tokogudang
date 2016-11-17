@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
+use kartik\mpdf\Pdf;
 
 /**
  * BarangController implements the CRUD actions for Barang model.
@@ -208,5 +209,31 @@ class BarangController extends Controller
                 'dataProvider' => $dataProvider,
             ]
         );
+    }
+
+    /**
+     * Label
+     */
+    public function actionLabel()
+    {
+        $model = new Barang();
+        $record = $model->find()->select(['nm_barang', 'harga_jual'])->all();
+        $content = $this->renderPartial(
+            'label',
+            [
+                'model' => $record
+            ]
+        );
+        $string = 'http://localhost/ewarung/vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
+        $cssFile = file_get_contents($string);
+        $pdf = new Pdf();
+        $mpdf = $pdf->api;
+        $mpdf->SetHeader('Cetak Label Harga');
+        $mpdf->SetFooter('{PAGENO}');
+        $mpdf->setCss('.box-label{width: 400px;}');
+        #$mpdf->SetJS('this.print();');
+        //$mpdf->WriteHtml($cssFile, 1);
+        $mpdf->WriteHtml($content, 2);
+        $mpdf->Output();
     }
 }

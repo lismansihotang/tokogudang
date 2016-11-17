@@ -319,7 +319,6 @@ a.desc:after {
     }
 }
 
-
 /* Orange Nav */
 /*
 .navbar-default {
@@ -423,4 +422,8 @@ a.desc:after {
 
 .margin-top-15 {
     margin-top: 15px;
+}
+
+.margin-5{
+    margin: 5px;
 }

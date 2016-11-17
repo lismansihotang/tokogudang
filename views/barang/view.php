@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use kartik\editable\Editable;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Barang */
@@ -83,7 +84,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['class' => 'yii\grid\SerialColumn'],
                         'id',
                         'barcode',
-                        ['class' => 'yii\grid\ActionColumn', 'template' => '{delete}'],
+                        [
+                            'class'    => 'yii\grid\ActionColumn',
+                            'template' => '{delete}',
+                            'buttons'  => [
+                                'delete' => function ($url, $model, $id) {
+                                    return Html::a(
+                                        'Delete',
+                                        Url::to(['barang-detail/delete', 'id' => $id, 'model' => $model->id_barang])
+                                    );
+                                }
+                            ]
+                        ]
                     ],
                 ]
             ); ?>

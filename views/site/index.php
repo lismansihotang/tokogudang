@@ -12,4 +12,4 @@ $this->title = 'e-Warung POS';
         </div>
     </div>
 <?php
-shell_exec('D:/CashDrawer/run.exe');
+#shell_exec('D:/CashDrawer/run.exe');

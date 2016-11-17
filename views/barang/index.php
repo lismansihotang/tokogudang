@@ -13,6 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
         <p>
             <?php echo Html::a('Create Barang', ['create'], ['class' => 'btn btn-success']); ?>
+            <?php echo Html::a(
+                'Cetak Label Harga Barang',
+                ['label'],
+                ['class' => 'btn btn-warning', 'target' => '_blank']
+            ); ?>
             <input type="text"
                    name="tx-barcode"
                    id="tx-barcode"

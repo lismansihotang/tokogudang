@@ -1,10 +1,11 @@
 <?php
 namespace app\controllers;
 
+use Yii;
 use app\models\Barang;
 use app\models\BarangDetail;
 use app\models\Penjualan;
-use Yii;
+use app\models\LogPenjualanDelete;
 use app\models\PenjualanDetail;
 use app\models\PenjualanDetailSearch;
 use yii\web\Controller;
@@ -132,10 +133,29 @@ class PenjualanDetailController extends Controller
     {
         # Find Header penjualan
         $model = $this->findModel($id);
+        # Update Penjualan
         $modelPenjualan = new Penjualan();
         $recordPenjualan = $modelPenjualan->findOne(['id' => $model->id_penjualan]);
         $recordPenjualan->subtotal = $recordPenjualan->subtotal - $model->subtotal;
         $recordPenjualan->save(false);
+        # Update stock Barang
+        $modelBarang = new Barang();
+        $recordBarang = $modelBarang->findOne(['id' => $model->id_barang]);
+        if ($recordBarang !== '') {
+            $recordBarang->stock += $model->jml;
+            $recordBarang->save(false);
+        }
+        # update log
+        $modelLogBarangDelete = new LogPenjualanDelete();
+        $modelLogBarangDelete->id_penjualan = $model->id_penjualan;
+        $modelLogBarangDelete->id_barang = $model->id_barang;
+        $modelLogBarangDelete->jml = $model->jml;
+        $modelLogBarangDelete->harga = $model->harga;
+        $modelLogBarangDelete->subtotal = $model->subtotal;
+        $modelLogBarangDelete->tgl = date('Y-m-d H:i:s');
+        $modelLogBarangDelete->user_id = Yii::$app->user->identity->id;
+        $modelLogBarangDelete->save(false);
+        # Hapus detail barang
         $this->findModel($id)->delete();
         return $this->redirect(['create', 'id-jual' => $model->id_penjualan]);
     }

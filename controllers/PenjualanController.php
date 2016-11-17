@@ -1,15 +1,17 @@
 <?php
 namespace app\controllers;
 
+use Yii;
 use app\models\Barang;
 use app\models\BarangDetail;
-use Yii;
 use app\models\Penjualan;
 use app\models\PenjualanSearch;
 use app\models\PenjualanDetailSearch;
+use app\models\PenjualanDetail;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use kartik\mpdf\Pdf;
 use yii\helpers\Json;
 
@@ -180,31 +182,49 @@ class PenjualanController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     *
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionPrint($id)
     {
+        /** $model = $this->findModel($id);
+         * $searchModel = new PenjualanDetailSearch();
+         * $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+         * $dataProvider->pagination = false;
+         * $dataProvider->query->where(['id_penjualan' => $id]);
+         * $content = $this->renderPartial(
+         * '_kwitansi',
+         * [
+         * 'model'        => $model,
+         * 'searchModel'  => $searchModel,
+         * 'dataProvider' => $dataProvider
+         * ]
+         * );
+         * $string = 'http://localhost/ewarung/vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
+         * $cssFile = file_get_contents($string);
+         * $pdf = new Pdf();
+         * $mpdf = $pdf->api;
+         * $mpdf->SetHeader('Kwitansi');
+         * $mpdf->SetFooter('{PAGENO}');
+         * $mpdf->SetJS('this.print();');
+         * $mpdf->WriteHtml($cssFile, 1);
+         * $mpdf->WriteHtml($content, 2);
+         * $mpdf->Output();
+         */
         $model = $this->findModel($id);
-        $searchModel = new PenjualanDetailSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination = false;
-        $dataProvider->query->where(['id_penjualan' => $id]);
-        $content = $this->renderPartial(
+        $modelDetail = new PenjualanDetail();
+        $recordDetail = $modelDetail->findAll(['id_penjualan' => $id]);
+        $modelBarang = ArrayHelper::map(Barang::find()->all(), 'id', 'nm_barang');
+        return $this->renderPartial(
             '_kwitansi',
             [
-                'model'        => $model,
-                'searchModel'  => $searchModel,
-                'dataProvider' => $dataProvider
+                'model'       => $model,
+                'modelDetail' => $recordDetail,
+                'modelBarang' => $modelBarang
             ]
         );
-        $string = 'http://localhost/ewarung/vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
-        $cssFile = file_get_contents($string);
-        $pdf = new Pdf();
-        $mpdf = $pdf->api;
-        $mpdf->SetHeader('Kwitansi');
-        $mpdf->SetFooter('{PAGENO}');
-        $mpdf->SetJS('this.print();');
-        $mpdf->WriteHtml($cssFile, 1);
-        $mpdf->WriteHtml($content, 2);
-        $mpdf->Output();
     }
 
     /**

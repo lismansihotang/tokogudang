@@ -186,7 +186,7 @@ class BarangDetailController extends Controller
             ['barcode' => Yii::$app->request->post('barcode')]
         );
         if ($record !== null) {
-            $data = ['result' => true, 'msg' => Url::to(['barang/view', 'id' => $record->id])];
+            $data = ['result' => true, 'msg' => Url::to(['barang/view', 'id' => $record->id_barang])];
         } else {
             $data = [
                 'result' => false,
