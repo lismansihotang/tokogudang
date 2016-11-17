@@ -19,7 +19,7 @@ class PelangganSearch extends Pelanggan
     {
         return [
             [['id'], 'integer'],
-            [['nm_pelanggan', 'alamat', 'no_telp', 'barcode', 'tgl_bergabung'], 'safe'],
+            [['nm_pelanggan', 'alamat', 'no_telp', 'barcode', 'card_number', 'tgl_bergabung'], 'safe'],
         ];
     }
 
@@ -66,7 +66,8 @@ class PelangganSearch extends Pelanggan
         $query->andFilterWhere(['like', 'nm_pelanggan', $this->nm_pelanggan])
             ->andFilterWhere(['like', 'alamat', $this->alamat])
             ->andFilterWhere(['like', 'no_telp', $this->no_telp])
-            ->andFilterWhere(['like', 'barcode', $this->barcode]);
+            ->andFilterWhere(['like', 'barcode', $this->barcode])
+            ->andFilterWhere(['like', 'card_number', $this->card_number]);
 
         return $dataProvider;
     }

@@ -25,6 +25,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'barcode') ?>
 
+    <?php // echo $form->field($model, 'card_number') ?>
+
     <?php // echo $form->field($model, 'tgl_bergabung') ?>
 
     <div class="form-group">

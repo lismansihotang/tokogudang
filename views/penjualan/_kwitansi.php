@@ -15,6 +15,7 @@ if ($record !== null) {
 <div class="penjualan-view">
     <h1>Toko Gudang</h1>
     <h4>#<?php echo $model->id . '/' . $model->tgl . '/' . $nm_pelanggan; ?></h4>
+    <h5>Jalan raya kalibata no. 17, Jakarta</h5>
 
     <div class="pull-right">
         <table>
@@ -53,7 +54,8 @@ if ($record !== null) {
                 <td colspan="3"><?php echo str_repeat('-', 53); ?></td>
             </tr>
             <tr>
-                <td colspan="3" style="text-align: right;"><h1><?php echo number_format(round($model->total)); ?></h1></td>
+                <td colspan="3" style="text-align: right;"><h1><?php echo number_format(round($model->total)); ?></h1>
+                </td>
             </tr>
             <tr>
                 <td></td>
@@ -63,7 +65,7 @@ if ($record !== null) {
             </tr>
             <tr>
                 <td></td>
-                <td>Cash</td>
+                <td>Bayar</td>
                 <td style="text-align: right;"><?php echo number_format($model->pembayaran); ?></td>
             </tr>
             <tr>

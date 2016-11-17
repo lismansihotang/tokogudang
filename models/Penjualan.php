@@ -15,6 +15,7 @@ use Yii;
  * @property string  $total
  * @property string  $pembayaran
  * @property string  $tipe_bayar
+ * @property string  $card_number
  */
 class Penjualan extends \yii\db\ActiveRecord
 {
@@ -37,7 +38,7 @@ class Penjualan extends \yii\db\ActiveRecord
             [['tgl'], 'safe'],
             [['id_pelanggan'], 'integer'],
             [['subtotal', 'disc', 'pajak', 'total', 'pembayaran'], 'string'],
-            [['tipe_bayar'], 'string'],
+            [['tipe_bayar', 'card_number'], 'string'],
         ];
     }
 
@@ -56,6 +57,7 @@ class Penjualan extends \yii\db\ActiveRecord
             'total'        => 'Total',
             'pembayaran'   => 'Pembayaran',
             'tipe_bayar'   => 'Tipe Bayar',
+            'card_number'  => 'Card Number',
         ];
     }
 

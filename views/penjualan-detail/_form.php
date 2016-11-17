@@ -27,11 +27,20 @@ echo '<div id="modalContent"></div>';
 Modal::end();
 ?>
     <div class="pull-right margin-bottom-lg">
-        <?php echo Html::button(
+        <?php
+        echo Html::button(
             '<span class="glyphicon glyphicon-shopping-cart"> </span> Pembayaran',
             [
                 'value' => Url::to('index.php?r=penjualan/payment&id=' . $idJual),
-                'class' => 'btn btn-sm btn-success',
+                'class' => 'btn btn-sm btn-success margin-right-5',
+                'id'    => 'modalButton'
+            ]
+        );
+        echo Html::a(
+            '<span class="glyphicon glyphicon-credit-card"> </span> Pembayaran Member',
+            Url::to('index.php?r=penjualan/payment-member&id=' . $idJual),
+            [
+                'class' => 'btn btn-sm btn-warning',
                 'id'    => 'modalButton'
             ]
         );
@@ -46,8 +55,7 @@ Modal::end();
         $form = ActiveForm::begin(['id' => 'frm-penjualan']);
         echo $form->field($model, 'id_barang')->textInput(
             ['id' => 'id-barang', 'placeholder' => 'Input atau Scan Barang']
-        )
-        ;
+        );
         ?>
         <?php ActiveForm::end(); ?>
     </div>
@@ -58,25 +66,28 @@ $('#id-barang').focus();
 $('#id-barang').keypress(function(e){
     var key = e.which || e.ctrlKey;
     if(key === 13){
-        $.ajax({
-           url: '?r=penjualan-detail/item-price',
-           dataType:'json',
-           data: {id: $(this).val(),jual:$idJual},
-           success: function(data) {
-               if(data.redirect===false){
-                    alert(data.msg);
-               }
-               window.location.reload(data.redirect);
-           },
-           error: function(){
-            alert('Error!!! Some function not run');
-            }
-        });
-        $('#frm-penjualan').submit(function(){
-            return false;
-        });
-        $(this).val('');
-        e.preventDefault();
+        var qtyItem = prompt('Isi Jumlah Pembelian Barang','1');
+        if(qtyItem !== null){
+            $.ajax({
+               url: '?r=penjualan-detail/item-price',
+               dataType:'json',
+               data: {id: $(this).val(),jual:$idJual,jml:qtyItem},
+               success: function(data) {
+                   if(data.redirect===false){
+                        alert(data.msg);
+                   }
+                   window.location.reload(data.redirect);
+               },
+               error: function(){
+                alert('Error!!! Some function not run');
+                }
+            });
+            $('#frm-penjualan').submit(function(){
+                return false;
+            });
+            $(this).val('');
+            e.preventDefault();
+        }
     }
 
 });

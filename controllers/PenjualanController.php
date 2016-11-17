@@ -6,8 +6,9 @@ use app\models\Barang;
 use app\models\BarangDetail;
 use app\models\Penjualan;
 use app\models\PenjualanSearch;
-use app\models\PenjualanDetailSearch;
 use app\models\PenjualanDetail;
+use app\models\PelangganQuota;
+use app\models\Pelanggan;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -142,6 +143,47 @@ class PenjualanController extends Controller
             } else {
                 return $this->render(
                     'payment',
+                    [
+                        'model' => $model,
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * @param $id
+     *
+     * @return string|\yii\web\Response
+     * @throws \yii\web\NotFoundHttpException
+     */
+    public function actionPaymentMember($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post())) {
+            $modelPelanggan = new Pelanggan();
+            $recordPelanggan = $modelPelanggan->findOne(['card_number' => $model->card_number]);
+            if ($recordPelanggan !== null) {
+                $modelPelangganDetail = new PelangganQuota();
+                $recordPelangganDetail = $modelPelangganDetail->findOne(['pelanggan_id' => $recordPelanggan->id]);
+                if ($recordPelangganDetail !== null) {
+                    $recordPelangganDetail->nominal -= $model->pembayaran;
+                }
+                $recordPelangganDetail->save(false);
+            }
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            if (Yii::$app->request->isAjax) {
+                return $this->renderAjax(
+                    'payment_member',
+                    [
+                        'model' => $model,
+                    ]
+                );
+            } else {
+                return $this->render(
+                    'payment_member',
                     [
                         'model' => $model,
                     ]

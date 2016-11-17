@@ -200,20 +200,25 @@ class PenjualanDetailController extends Controller
                 ['id_penjualan' => Yii::$app->request->get('jual'), 'id_barang' => $recordBarangDetail['id_barang']]
             );
             # check untuk insert atau update data
+            $jmlBarang = 1;
+            if (Yii::$app->request->get('jml') !== null) {
+                $jmlBarang = (integer)Yii::$app->request->get('jml');
+            }
             if ($recordPenjualanDetail !== null) {
                 $model = $recordPenjualanDetail;
                 $model->subtotal = $recordPenjualanDetail->subtotal + $recordBarang['harga_jual'];
-                $model->jml = $recordPenjualanDetail->jml + 1;
+                $model->jml = $recordPenjualanDetail->jml + $jmlBarang;
             } else {
                 $model = $modelPenjualanDetail;
                 $model->id_penjualan = Yii::$app->request->get('jual');
                 $model->id_barang = $recordBarangDetail['id_barang'];
                 $model->harga = $recordBarang['harga_jual'];
+                $model->jml = $jmlBarang;
                 $model->subtotal = $recordBarang['harga_jual'];
             }
             #update tabel barang
-            if ($recordBarang->stock > 1) {
-                $recordBarang->stock -= 1;
+            if ($recordBarang->stock > $jmlBarang) {
+                $recordBarang->stock -= $jmlBarang;
                 #update tabel penjualan
                 $recordPenjualan->subtotal += $model->harga;
                 if ($model->save(false) && $recordPenjualan->save(false) && $recordBarang->save(false)) {

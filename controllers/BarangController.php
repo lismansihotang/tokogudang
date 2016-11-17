@@ -106,7 +106,7 @@ class BarangController extends Controller
             $model->user_id = Yii::$app->user->identity->id;
             if (strlen(round($model->harga_jual)) > 2) {
                 $pecahan = (integer)substr(round($model->harga_jual), -2);
-                if ($pecahan < 100) {
+                if ($pecahan > 0 and $pecahan < 100) {
                     $dasarHargaJual = (integer)substr(
                             round($model->harga_jual),
                             0,
@@ -142,7 +142,7 @@ class BarangController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if (strlen(round($model->harga_jual)) > 2) {
                 $pecahan = (integer)substr(round($model->harga_jual), -2);
-                if ($pecahan < 100) {
+                if ($pecahan > 0 and $pecahan < 100) {
                     $dasarHargaJual = (integer)substr(
                             round($model->harga_jual),
                             0,
