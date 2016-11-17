@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use kartik\mpdf\Pdf;
+use yii\helpers\ArrayHelper;
 
 /**
  * BarangController implements the CRUD actions for Barang model.
@@ -216,12 +217,11 @@ class BarangController extends Controller
      */
     public function actionLabel()
     {
-        $model = new Barang();
-        $record = $model->find()->select(['nm_barang', 'harga_jual'])->all();
+        $arrRecord = ArrayHelper::toArray(Barang::find()->select(['nm_barang', 'harga_jual'])->all());
         $content = $this->renderPartial(
             'label',
             [
-                'model' => $record
+                'model' => $arrRecord
             ]
         );
         $string = 'http://localhost/ewarung/vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
