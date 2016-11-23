@@ -36,6 +36,19 @@ class DataPenjualanController extends Controller
         $mpdf = $pdf->api;
         $mpdf->SetHeader('Laporan Penjualan Barang');
         $mpdf->SetFooter('{PAGENO}');
+        $mpdf->AddPage(
+            'L', // L - landscape, P - portrait
+            '',
+            '',
+            '',
+            '',
+            10, // margin_left
+            10, // margin right
+            10, // margin top
+            10, // margin bottom
+            18, // margin header
+            12
+        );
         $mpdf->WriteHtml($content, 2);
         $mpdf->Output();
     }

@@ -6,6 +6,8 @@
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Barcode No</th>
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">ID Barang</th>
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Item Name</th>
+        <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Qty Display</th>
+        <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Qty Gudang</th>
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Qty Sales</th>
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Stock</th>
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Net Price</th>
@@ -15,6 +17,7 @@
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Sales Price</th>
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Profit/Qty</th>
         <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Profit</th>
+        <th style="border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;">Total Sales</th>
     </tr>
     </thead>
     <tbody>
@@ -29,6 +32,7 @@
         $salesPrice = 0;
         $profitItemPrice = 0;
         $profitPrice = 0;
+        $totalSales = 0;
         foreach ($data as $row) {
             $profit = $row->harga - $row->harga_beli;
             $profitItem = @($profit / $row->jml);
@@ -41,12 +45,18 @@
             $salesPrice += $row->harga;
             $profitItemPrice += $profitItem;
             $profitPrice += $profit;
+            $totalSalesItem = $row->harga * $row->jml;
+            $totalSales += $totalSalesItem;
             ?>
             <tr>
                 <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo $i; ?></td>
                 <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo $row->barcode; ?></td>
                 <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo $row->id_barang; ?></td>
                 <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo $row->nm_barang; ?></td>
+                <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo number_format(
+                        $row->stock
+                    ); ?></td>
+                <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"></td>
                 <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo number_format(
                         $row->jml
                     ); ?></td>
@@ -74,13 +84,16 @@
                 <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo number_format(
                         $profit
                     ); ?></td>
+                <td style="text-align: center;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo number_format(
+                        $totalSalesItem
+                    ); ?></td>
             </tr>
             <?php
             $i++;
         }
         ?>
         <tr>
-            <td colspan="4"
+            <td colspan="6"
                 style="text-align: center;font-weight: bold;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">
                 Total
             </td>
@@ -109,9 +122,16 @@
             <td style="text-align: center;font-weight: bold;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo number_format(
                     $profitPrice
                 ); ?></td>
+            <td style="text-align: center;font-weight: bold;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;"><?php echo number_format(
+                    $totalSales
+                ); ?></td>
         </tr>
         <?php
     }
     ?>
     </tbody>
 </table>
+<br><br>
+PIC,
+<br><br><br><br><br>
+(.....................)
