@@ -13,7 +13,7 @@ if ($record !== null) {
 }
 ?>
 <div class="penjualan-view">
-    <h1>Toko Gudang</h1>
+    <h1>Toko De Apik</h1>
     <h4>#<?php echo $model->id . '/' . $model->tgl . '/' . $nm_pelanggan; ?></h4>
     <h5>Jalan raya kalibata no. 17, Jakarta</h5>
 

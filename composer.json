@@ -36,7 +36,9 @@
         "kartik-v/yii2-dialog":"*",
         "vilochane/yii2-barcode-generator":"*",
         "reportico/yii2-reportico": "dev-master",
-        "kartik-v/yii2-field-range": "*"
+        "kartik-v/yii2-field-range": "*",
+        "webvimark/module-user-management": "^1.0",
+        "open-ecommerce/yii2-backuprestore": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception":"*",

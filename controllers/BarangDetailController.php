@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\helpers\Url;
+use app\models\LogScanMbarang;
 
 /**
  * BarangDetailController implements the CRUD actions for BarangDetail model.
@@ -26,7 +27,7 @@ class BarangDetailController extends Controller
             'verbs' => [
                 'class'   => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['POST', 'GET'],
                 ],
             ],
         ];
@@ -121,8 +122,15 @@ class BarangDetailController extends Controller
      */
     public function actionDelete($id)
     {
+        $row = $this->findModel($id);
+        $modelLog = new LogScanMbarang();
+        $modelLog->tgl = date('Y-m-d H:i:s');
+        $modelLog->id_barang = $row->id_barang;
+        $modelLog->barcode = $row->barcode;
+        $modelLog->user_id = Yii::$app->user->identity->id;
+        $modelLog->save(false);
         $this->findModel($id)->delete();
-        return $this->redirect(['index']);
+        return $this->redirect(Url::to(['barang/view', 'id' => Yii::$app->request->get('model')]));
     }
 
     /**

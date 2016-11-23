@@ -10,7 +10,13 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="barang-index">
     <h1><?php echo Html::encode($this->title) ?></h1>
-    <?php echo GridView::widget(
+    <?php
+    echo Html::a(
+        'Pdf Stock Barang',
+        ['report-stock-pdf'],
+        ['class' => 'btn btn-success margin-right-5', 'target' => '_blank']
+    );
+    echo GridView::widget(
         [
             'dataProvider' => $dataProvider,
             'columns'      => [

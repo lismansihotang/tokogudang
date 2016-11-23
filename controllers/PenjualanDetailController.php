@@ -186,8 +186,9 @@ class PenjualanDetailController extends Controller
         $data = [];
         if (Yii::$app->request->isAjax) {
             # Get Record item id From scan barcode
+            $getBarcode = Yii::$app->request->get('id');
             $barangDetail = new BarangDetail();
-            $recordBarangDetail = $barangDetail->findOne(['barcode' => Yii::$app->request->get('id')]);
+            $recordBarangDetail = $barangDetail->findOne(['barcode' => $getBarcode]);
             # Get Record Price from detail items
             $dataBarang = new Barang();
             $recordBarang = $dataBarang->findOne(['id' => $recordBarangDetail['id_barang']]);
@@ -206,21 +207,23 @@ class PenjualanDetailController extends Controller
             }
             if ($recordPenjualanDetail !== null) {
                 $model = $recordPenjualanDetail;
-                $model->subtotal = $recordPenjualanDetail->subtotal + $recordBarang['harga_jual'];
+                $model->subtotal = $recordPenjualanDetail->subtotal + ($jmlBarang * $recordBarang['harga_jual']);
                 $model->jml = $recordPenjualanDetail->jml + $jmlBarang;
+                $model->barcode = $getBarcode;
             } else {
                 $model = $modelPenjualanDetail;
                 $model->id_penjualan = Yii::$app->request->get('jual');
                 $model->id_barang = $recordBarangDetail['id_barang'];
                 $model->harga = $recordBarang['harga_jual'];
                 $model->jml = $jmlBarang;
-                $model->subtotal = $recordBarang['harga_jual'];
+                $model->subtotal = $jmlBarang * $recordBarang['harga_jual'];
+                $model->barcode = $getBarcode;
             }
             #update tabel barang
             if ($recordBarang->stock > $jmlBarang) {
                 $recordBarang->stock -= $jmlBarang;
                 #update tabel penjualan
-                $recordPenjualan->subtotal += $model->harga;
+                $recordPenjualan->subtotal += ($jmlBarang * $model->harga);
                 if ($model->save(false) && $recordPenjualan->save(false) && $recordBarang->save(false)) {
                     $data = ['msg' => 'Data Berhasil di simpan', 'redirect' => true];
                 } else {

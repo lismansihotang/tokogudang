@@ -17,8 +17,10 @@ use yii\widgets\MaskedInput;
                 'Kartu Kredit'  => 'Kartu Kredit',
             ],
             ['prompt' => '']
-        )
-        ;
+        );
+        echo $form->field($model, 'card_number')->textInput(
+            ['maxlength' => true, 'id' => 'card_number']
+        );
         echo $form->field($model, 'subtotal')->widget(
             MaskedInput::className(),
             [
@@ -29,8 +31,7 @@ use yii\widgets\MaskedInput;
                     'removeMaskOnSubmit' => true,
                 ]
             ]
-        )
-        ;
+        );
         echo $form->field($model, 'disc')->widget(
             MaskedInput::className(),
             [
@@ -41,8 +42,7 @@ use yii\widgets\MaskedInput;
                     'removeMaskOnSubmit' => true,
                 ]
             ]
-        )
-        ;
+        );
         echo $form->field($model, 'total')->hiddenInput(['id' => 'penjualan-total'])->label(false);
         echo $form->field($model, 'pembayaran')->widget(
             MaskedInput::className(),
@@ -54,8 +54,7 @@ use yii\widgets\MaskedInput;
                     'removeMaskOnSubmit' => true,
                 ]
             ]
-        )
-        ;
+        );
         ?>
         <h1 id="v-total"></h1>
 

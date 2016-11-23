@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -9,10 +8,11 @@ use Yii;
  *
  * @property integer $id
  * @property integer $id_barang
- * @property string $barcode
+ * @property string  $barcode
  */
 class BarangDetail extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -39,9 +39,9 @@ class BarangDetail extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id'        => 'ID',
             'id_barang' => 'Nama Barang',
-            'barcode' => 'Barcode',
+            'barcode'   => 'Barcode',
         ];
     }
 
@@ -53,4 +53,5 @@ class BarangDetail extends \yii\db\ActiveRecord
     {
         return new BarangDetailQuery(get_called_class());
     }
+
 }

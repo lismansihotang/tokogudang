@@ -1,0 +1,54 @@
+TASK
+
+# Buat Field Baru
+=============================
+penjualan_detail
+ - barcode : varchar (35) 
+ - Comment : Barcode
+
+
+# Buat View Baru
+=============================
+CREATE
+    VIEW `db_pos_tokogudang`.`v_penjualan_custom` 
+    AS
+SELECT
+    `penjualan`.`id`
+    , `penjualan`.`tgl`
+    , `penjualan`.`id_pelanggan`
+    , `penjualan`.`disc`
+    , `penjualan`.`pajak`
+    , `penjualan`.`total`
+    , `penjualan`.`pembayaran`
+    , `penjualan`.`tipe_bayar`
+    , `penjualan`.`user_id`
+    , `penjualan`.`insert_date`
+    , `penjualan`.`update_date`
+    , `penjualan`.`card_number`
+    , `penjualan_detail`.`id_barang`
+    , `penjualan_detail`.`jml`
+    , `penjualan_detail`.`harga`
+    , `penjualan_detail`.`subtotal`
+    , `penjualan_detail`.`barcode`
+    , `barang`.`nm_barang`
+    , `barang`.`harga_beli`
+    , `barang`.`margin_jual`
+    , `barang`.`harga_jual`
+    , `barang`.`stock`
+FROM
+    `db_pos_tokogudang`.`penjualan_detail`
+    INNER JOIN `db_pos_tokogudang`.`penjualan` 
+        ON (`penjualan_detail`.`id_penjualan` = `penjualan`.`id`)
+    INNER JOIN `db_pos_tokogudang`.`barang` 
+        ON (`barang`.`id` = `penjualan_detail`.`id_barang`)
+    INNER JOIN `db_pos_tokogudang`.`barang_detail` 
+        ON (`barang_detail`.`id_barang` = `barang`.`id`);
+
+
+
+
+# Update Penjualan yg sebelumnya tanpa barcode
+==============================================
+UPDATE penjualan_detail 
+SET barcode=(SELECT barcode FROM barang_detail 
+WHERE barang_detail.`id_barang`=penjualan_detail.`id_barang` LIMIT 0,1)

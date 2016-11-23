@@ -5,6 +5,7 @@ use Yii;
 use app\models\BarangDetailSearch;
 use app\models\Barang;
 use app\models\BarangSearch;
+use app\models\BarangDetail;
 use app\models\LogUpdateStock;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,6 +13,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use kartik\mpdf\Pdf;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /**
  * BarangController implements the CRUD actions for Barang model.
@@ -224,15 +226,59 @@ class BarangController extends Controller
                 'model' => $arrRecord
             ]
         );
-        $string = 'http://localhost/ewarung/vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
-        $cssFile = file_get_contents($string);
+        #$string = 'http://localhost/ewarung/vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css';
+        #$cssFile = file_get_contents($string);
         $pdf = new Pdf();
         $mpdf = $pdf->api;
         $mpdf->SetHeader('Cetak Label Harga');
         $mpdf->SetFooter('{PAGENO}');
         $mpdf->setCss('.box-label{width: 400px;}');
         #$mpdf->SetJS('this.print();');
-        //$mpdf->WriteHtml($cssFile, 1);
+        #$mpdf->WriteHtml($cssFile, 1);
+        $mpdf->WriteHtml($content, 2);
+        $mpdf->Output();
+    }
+
+    /**
+     * Report Barang
+     */
+    public function actionReport()
+    {
+        $modelBarang = new Barang();
+        $recordBarang = $modelBarang->find()->all();
+        $content = $this->renderPartial(
+            'report_barang',
+            [
+                'model' => $recordBarang
+            ]
+        );
+        $pdf = new Pdf();
+        $mpdf = $pdf->api;
+        $mpdf->SetHeader('Cetak List Harga Barang');
+        $mpdf->SetFooter('{PAGENO}');
+        $mpdf->WriteHtml($content, 2);
+        $mpdf->Output();
+    }
+
+    /**
+     * Report Stock PDF
+     */
+    public function actionReportStockPdf()
+    {
+        $modelBarang = new Barang();
+        $recordBarang = $modelBarang->find()->all();
+        $recordBarangDetail = ArrayHelper::map(BarangDetail::find()->all(), 'id_barang', 'barcode');
+        $content = $this->renderPartial(
+            'report_stock_pdf',
+            [
+                'model'       => $recordBarang,
+                'modelDetail' => $recordBarangDetail
+            ]
+        );
+        $pdf = new Pdf();
+        $mpdf = $pdf->api;
+        $mpdf->SetHeader('PDF Stock Barang');
+        $mpdf->SetFooter('{PAGENO}');
         $mpdf->WriteHtml($content, 2);
         $mpdf->Output();
     }
