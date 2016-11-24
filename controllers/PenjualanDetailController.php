@@ -220,7 +220,7 @@ class PenjualanDetailController extends Controller
                 $model->barcode = $getBarcode;
             }
             #update tabel barang
-            if ($recordBarang->stock > $jmlBarang) {
+            if ($recordBarang->stock >= $jmlBarang) {
                 $recordBarang->stock -= $jmlBarang;
                 #update tabel penjualan
                 $recordPenjualan->subtotal += ($jmlBarang * $model->harga);

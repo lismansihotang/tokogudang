@@ -99,6 +99,29 @@ class PenjualanController extends Controller
     }
 
     /**
+     * @return \yii\web\Response
+     */
+    public function actionShortCreate()
+    {
+        $model = new Penjualan();
+        $record = $model->find()->where(
+            'DATE(tgl) = "' . date(
+                'Y-m-d'
+            ) . '" AND user_id = "' . Yii::$app->user->identity->id . '" AND pembayaran = "0" '
+        )->all();
+        if (count($record) > 0) {
+            $idPenjualan = $record[0]->id;
+        } else {
+            $model->user_id = Yii::$app->user->identity->id;
+            $model->tgl .= ' ' . date('H:i:s');
+            $model->insert_date = date('Y-m-d H:i:s');
+            $model->save();
+            $idPenjualan = $model->id;
+        }
+        return $this->redirect(['penjualan-detail/create', 'id-jual' => $idPenjualan]);
+    }
+
+    /**
      * Updates an existing Penjualan model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
@@ -131,7 +154,8 @@ class PenjualanController extends Controller
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            #return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['print', 'id' => $model->id]);
         } else {
             if (Yii::$app->request->isAjax) {
                 return $this->renderAjax(

@@ -1,6 +1,6 @@
 <?php
-use yii\grid\GridView;
 use app\models\Pelanggan;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Penjualan */
@@ -12,6 +12,7 @@ if ($record !== null) {
     $nm_pelanggan = $record['nm_pelanggan'];
 }
 ?>
+
 <div class="penjualan-view">
     <h1>Toko De Apik</h1>
     <h4>#<?php echo $model->id . '/' . $model->tgl . '/' . $nm_pelanggan; ?></h4>
@@ -128,3 +129,4 @@ if ($record !== null) {
 <script>
     window.print();
 </script>
+<meta http-equiv="refresh" content="0; url=<?php echo Url::toRoute('site/index'); ?>" />

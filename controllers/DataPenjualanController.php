@@ -34,7 +34,13 @@ class DataPenjualanController extends Controller
         #return $content;
         $pdf = new Pdf();
         $mpdf = $pdf->api;
-        $mpdf->SetHeader('Laporan Penjualan Barang');
+        $mpdf->SetHeader(
+            'Laporan Penjualan Barang : ' . Yii::$app->request->get(
+                'tgl_awal'
+            ) . ' s/d ' . Yii::$app->request->get(
+                'tgl_akhir'
+            )
+        );
         $mpdf->SetFooter('{PAGENO}');
         $mpdf->AddPage(
             'L', // L - landscape, P - portrait

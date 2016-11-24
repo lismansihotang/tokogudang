@@ -282,4 +282,25 @@ class BarangController extends Controller
         $mpdf->WriteHtml($content, 2);
         $mpdf->Output();
     }
+
+    /**
+     *
+     */
+    public function actionViewMinStock()
+    {
+        $modelBarang = new Barang();
+        $recordBarang = $modelBarang->find()->where('stock < min_stock')->all();
+        $content = $this->renderPartial(
+            'view_min_stock',
+            [
+                'model' => $recordBarang
+            ]
+        );
+        $pdf = new Pdf();
+        $mpdf = $pdf->api;
+        $mpdf->SetHeader('PDF Stock Barang');
+        $mpdf->SetFooter('{PAGENO}');
+        $mpdf->WriteHtml($content, 2);
+        $mpdf->Output();
+    }
 }

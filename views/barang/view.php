@@ -4,6 +4,7 @@ use yii\widgets\DetailView;
 use yii\grid\GridView;
 use kartik\editable\Editable;
 use yii\helpers\Url;
+use barcode\barcode\BarcodeGenerator;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Barang */
@@ -16,8 +17,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="barang-view">
                 <h1>#<?php echo Html::encode($this->title); ?></h1>
 
+                <div id="barcode-view"></div>
                 <div class="btn-group margin-bottom-5">
                     <?php
+                    echo BarcodeGenerator::widget(
+                        ['elementId' => 'barcode-view', 'value' => '4797001018719', 'type' => 'ean13']
+                    );
                     echo Html::a('Home', ['index'], ['class' => 'btn btn-sm btn-success']);
                     echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']);
                     echo Html::a(

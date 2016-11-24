@@ -131,7 +131,24 @@
     ?>
     </tbody>
 </table>
-<br><br>
-PIC,
+
 <br><br><br><br><br>
-(.....................)
+<table>
+    <tbody>
+    <tr>
+        <td style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;border-right: 1px solid #ccc;">Kasir</td>
+        <td style="border-top: 1px solid #ccc;border-right: 1px solid #ccc;">Store Head</td>
+        <td style="border-top: 1px solid #ccc;border-right: 1px solid #ccc;">Manager CP</td>
+    </tr>
+    <tr>
+        <td style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;border-right: 1px solid #ccc;height: 100px;"></td>
+        <td style="border-top: 1px solid #ccc;border-right: 1px solid #ccc;"></td>
+        <td style="border-top: 1px solid #ccc;border-right: 1px solid #ccc;"></td>
+    </tr>
+    <tr>
+        <td style="border-left: 1px solid #ccc;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">&nbsp;</td>
+        <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">&nbsp;</td>
+        <td style="border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;">&nbsp;</td>
+    </tr>
+    </tbody>
+</table>
