@@ -113,8 +113,9 @@ class PenjualanController extends Controller
             $idPenjualan = $record[0]->id;
         } else {
             $model->user_id = Yii::$app->user->identity->id;
-            $model->tgl .= ' ' . date('H:i:s');
+            $model->tgl = date('Y-m-d H:i:s');
             $model->insert_date = date('Y-m-d H:i:s');
+            $model->id_pelanggan = '1';
             $model->save();
             $idPenjualan = $model->id;
         }

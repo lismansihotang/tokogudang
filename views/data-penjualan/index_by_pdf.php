@@ -34,8 +34,9 @@
         $profitPrice = 0;
         $totalSales = 0;
         foreach ($data as $row) {
-            $profit = $row->harga - $row->harga_beli;
-            $profitItem = @($profit / $row->jml);
+            $profitItem = $row->harga - $row->harga_beli;
+            $profit = $profitItem * $row->jml;
+            //$profitItem = @($profit / $row->jml);
             # counting for total
             $qtySales += $row->jml;
             $netPrice += $row->harga_beli;

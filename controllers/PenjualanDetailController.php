@@ -205,9 +205,10 @@ class PenjualanDetailController extends Controller
             if (Yii::$app->request->get('jml') !== null) {
                 $jmlBarang = (integer)Yii::$app->request->get('jml');
             }
+            $subtotalBarang = $jmlBarang * $recordBarang['harga_jual'];
             if ($recordPenjualanDetail !== null) {
                 $model = $recordPenjualanDetail;
-                $model->subtotal = $recordPenjualanDetail->subtotal + ($jmlBarang * $recordBarang['harga_jual']);
+                $model->subtotal = $recordPenjualanDetail->subtotal + $subtotalBarang;
                 $model->jml = $recordPenjualanDetail->jml + $jmlBarang;
                 $model->barcode = $getBarcode;
             } else {
@@ -216,14 +217,14 @@ class PenjualanDetailController extends Controller
                 $model->id_barang = $recordBarangDetail['id_barang'];
                 $model->harga = $recordBarang['harga_jual'];
                 $model->jml = $jmlBarang;
-                $model->subtotal = $jmlBarang * $recordBarang['harga_jual'];
+                $model->subtotal = $subtotalBarang;
                 $model->barcode = $getBarcode;
             }
             #update tabel barang
             if ($recordBarang->stock >= $jmlBarang) {
                 $recordBarang->stock -= $jmlBarang;
                 #update tabel penjualan
-                $recordPenjualan->subtotal += ($jmlBarang * $model->harga);
+                $recordPenjualan->subtotal += $model->subtotal;
                 if ($model->save(false) && $recordPenjualan->save(false) && $recordBarang->save(false)) {
                     $data = ['msg' => 'Data Berhasil di simpan', 'redirect' => true];
                 } else {

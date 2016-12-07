@@ -13,8 +13,13 @@ $idJual = $request->get('id-jual');
 $modelPenjualan = new Penjualan();
 $record = $modelPenjualan->findOne(['id' => $idJual]);
 $subtotal = 0;
+$pembayaran = 0;
 if ($record !== null) {
     $subtotal = $record->subtotal;
+    $pembayaran = $record->pembayaran;
+}
+if ($pembayaran > 0) {
+    echo '<meta http-equiv="refresh" content="0; url=' . Url::toRoute(['penjualan/view', 'id' => $idJual]) . '" />';
 }
 Modal::begin(
     [

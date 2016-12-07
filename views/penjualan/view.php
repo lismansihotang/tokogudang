@@ -37,7 +37,7 @@ $pembayaran = (integer)$model->pembayaran;
         echo Html::a(
             'Print',
             ['print', 'id' => $model->id],
-            ['class' => 'btn btn-sm btn-warning', 'target' => '_blank', 'id' => 'btn-for-print']
+            ['class' => 'btn btn-sm btn-warning', 'id' => 'btn-for-print']
         ); ?>
     </div>
     <?php echo DetailView::widget(

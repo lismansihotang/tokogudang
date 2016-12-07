@@ -128,5 +128,5 @@ if ($record !== null) {
 <?php shell_exec('D:/CashDrawer/run.exe'); ?>
 <script>
     window.print();
+    window.location = '<?php echo Url::toRoute('site/index'); ?>';
 </script>
-<meta http-equiv="refresh" content="0; url=<?php echo Url::toRoute('site/index'); ?>" />
