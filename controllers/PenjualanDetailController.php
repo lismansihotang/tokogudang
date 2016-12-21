@@ -6,6 +6,7 @@ use app\models\Barang;
 use app\models\BarangDetail;
 use app\models\Penjualan;
 use app\models\LogPenjualanDelete;
+use app\models\LogJualDetail;
 use app\models\PenjualanDetail;
 use app\models\PenjualanDetailSearch;
 use yii\web\Controller;
@@ -221,17 +222,28 @@ class PenjualanDetailController extends Controller
                 $model->barcode = $getBarcode;
             }
             #update tabel barang
-            if ($recordBarang->stock >= $jmlBarang) {
-                $recordBarang->stock -= $jmlBarang;
-                #update tabel penjualan
-                $recordPenjualan->subtotal += $model->subtotal;
-                if ($model->save(false) && $recordPenjualan->save(false) && $recordBarang->save(false)) {
-                    $data = ['msg' => 'Data Berhasil di simpan', 'redirect' => true];
+            if (count($recordBarang) > 0) {
+                if ($recordBarang->stock >= $jmlBarang) {
+                    $recordBarang->stock -= $jmlBarang;
+                    #update tabel penjualan
+                    $recordPenjualan->subtotal += $model->subtotal;
+                    if ($model->save(false) && $recordPenjualan->save(false) && $recordBarang->save(false)) {
+                        $newLogJualDetail = new LogJualDetail();
+                        $newLogJualDetail->id_penjualan = $recordPenjualan->id;
+                        $newLogJualDetail->tgl_penjualan = $recordPenjualan->tgl;
+                        $newLogJualDetail->id_barang = $recordBarangDetail['id_barang'];
+                        $newLogJualDetail->harga_beli = $recordBarang['harga_beli'];
+                        $newLogJualDetail->insert_date = date('Y-m-d H::i:s');
+                        $newLogJualDetail->save(false);
+                        $data = ['msg' => 'Data Berhasil di simpan', 'redirect' => true];
+                    } else {
+                        $data = ['msg' => 'Data Gagal di simpan', 'redirect' => false];
+                    }
                 } else {
-                    $data = ['msg' => 'Data Gagal di simpan', 'redirect' => false];
+                    $data = ['msg' => 'Data Gagal di simpan. Stock Barang habis', 'redirect' => false];
                 }
             } else {
-                $data = ['msg' => 'Data Gagal di simpan. Stock Barang habis', 'redirect' => false];
+                $data = ['msg' => 'Data Gagal di simpan. Barang tidak ada', 'redirect' => false];
             }
         }
         return Json::encode($data);

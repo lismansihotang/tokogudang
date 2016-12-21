@@ -106,16 +106,22 @@ class BarangController extends Controller
         $model = new Barang();
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->identity->id;
-            if (strlen(round($model->harga_jual)) > 2) {
-                $pecahan = (integer)substr(round($model->harga_jual), -2);
-                if ($pecahan > 0 and $pecahan < 100) {
-                    $dasarHargaJual = (integer)substr(
-                            round($model->harga_jual),
-                            0,
-                            strlen(round($model->harga_jual)) - 2
-                        ) . '00';
-                    $hargaJual = $dasarHargaJual + 100;
-                    $model->harga_jual = $hargaJual;
+            if ($model->margin_jual === null || (int)$model->margin_jual === 0) {
+                $profit = $model->harga_jual - $model->harga_beli;
+                $margin = ($profit / $model->harga_beli) * 100;
+                $model->margin_jual = $margin;
+            } else {
+                if (strlen(round($model->harga_jual)) > 2) {
+                    $pecahan = (integer)substr(round($model->harga_jual), -2);
+                    if ($pecahan > 0 and $pecahan < 100) {
+                        $dasarHargaJual = (integer)substr(
+                                round($model->harga_jual),
+                                0,
+                                strlen(round($model->harga_jual)) - 2
+                            ) . '00';
+                        $hargaJual = $dasarHargaJual + 100;
+                        $model->harga_jual = $hargaJual;
+                    }
                 }
             }
             $model->save();
@@ -130,6 +136,52 @@ class BarangController extends Controller
         }
     }
 
+    public function actionCreateBarcode($id)
+    {
+        $countBarang = strlen($id);
+        $rowText = '899000123123';
+        $headerFormat = substr($rowText, 0, 12 - $countBarang) . $id;
+        $modelDetail = new BarangDetail();
+        $number = substr($headerFormat, 0, 1) + substr($headerFormat, 2, 1) + substr(
+                $headerFormat,
+                4,
+                1
+            ) + substr($headerFormat, 6, 1) + substr($headerFormat, 8, 1) + substr(
+                $headerFormat,
+                10,
+                1
+            );
+        $number2 = substr($headerFormat, 1, 1) + substr($headerFormat, 3, 1) + substr($headerFormat, 5, 1) + substr(
+                $headerFormat,
+                7,
+                1
+            ) + substr($headerFormat, 9, 1) + substr($headerFormat, 11, 1);
+        $totalNumber = $number + ($number2 * 3);
+        $gen = substr($totalNumber, -1, 1);
+        $fixNumber = 10 - $gen;
+        $genNumber = $headerFormat . $fixNumber;
+        $recordDetail = $modelDetail->findAll(['id_barang' => $id, 'barcode' => $genNumber]);
+        if (count($recordDetail) <= 0) {
+            $modelDetail->id_barang = $id;
+            $modelDetail->barcode = $genNumber;
+            $modelDetail->tgl = date('Y-m-d H:i:s');
+            $modelDetail->save(false);
+        }
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
+    public function actionPrintBarcode($id)
+    {
+        $modelDetail = new BarangDetail();
+        $recordDetail = $modelDetail->findAll(['id_barang' => $id]);
+        return $this->render(
+            'print_barcode',
+            [
+                'model' => $recordDetail,
+            ]
+        );
+    }
+
     /**
      * Updates an existing Barang model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -142,16 +194,22 @@ class BarangController extends Controller
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
-            if (strlen(round($model->harga_jual)) > 2) {
-                $pecahan = (integer)substr(round($model->harga_jual), -2);
-                if ($pecahan > 0 and $pecahan < 100) {
-                    $dasarHargaJual = (integer)substr(
-                            round($model->harga_jual),
-                            0,
-                            strlen(round($model->harga_jual)) - 2
-                        ) . '00';
-                    $hargaJual = $dasarHargaJual + 100;
-                    $model->harga_jual = $hargaJual;
+            if ($model->margin_jual === null || (int)$model->margin_jual === 0) {
+                $profit = $model->harga_jual - $model->harga_beli;
+                $margin = ($profit / $model->harga_beli) * 100;
+                $model->margin_jual = $margin;
+            } else {
+                if (strlen(round($model->harga_jual)) > 2) {
+                    $pecahan = (integer)substr(round($model->harga_jual), -2);
+                    if ($pecahan > 0 and $pecahan < 100) {
+                        $dasarHargaJual = (integer)substr(
+                                round($model->harga_jual),
+                                0,
+                                strlen(round($model->harga_jual)) - 2
+                            ) . '00';
+                        $hargaJual = $dasarHargaJual + 100;
+                        $model->harga_jual = $hargaJual;
+                    }
                 }
             }
             $model->save();

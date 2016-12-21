@@ -20,7 +20,9 @@ use app\models\Lokasi;
     echo $form->field($model, 'nm_barang')->textInput(['maxlength' => true]);
     echo $form->field($model, 'ket_barang')->textarea(['rows' => 6]);
     echo $form->field($model, 'harga_beli')->textInput(['maxlength' => true]);
-    echo $form->field($model, 'margin_jual')->textInput(['maxlength' => 3])->label('Margin Jual (Dalam %)');
+    echo $form->field($model, 'margin_jual')->textInput(['maxlength' => 3, 'value' => 0])->label(
+        'Margin Jual (Dalam %)'
+    );
     echo $form->field($model, 'harga_jual')->textInput(['maxlength' => true]);
     echo $form->field($model, 'id_satuan_kecil')->widget(
         Select2::className(),

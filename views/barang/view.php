@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Barang', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="barang-view">
                 <h1>#<?php echo Html::encode($this->title); ?></h1>
 
@@ -21,10 +21,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="btn-group margin-bottom-5">
                     <?php
                     echo BarcodeGenerator::widget(
-                        ['elementId' => 'barcode-view', 'value' => '4797001018719', 'type' => 'ean13']
+                        ['elementId' => 'barcode-view', 'value' => '8990001231249', 'type' => 'ean13']
                     );
                     echo Html::a('Home', ['index'], ['class' => 'btn btn-sm btn-success']);
                     echo Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary']);
+                    echo Html::a(
+                        'Create Barcode',
+                        ['create-barcode', 'id' => $model->id],
+                        ['class' => 'btn btn-sm btn-warning']
+                    );
+                    echo Html::a(
+                        'Print Barcode',
+                        ['print-barcode', 'id' => $model->id],
+                        ['class' => 'btn btn-sm btn-info']
+                    );
                     echo Html::a(
                         'Delete',
                         ['delete', 'id' => $model->id],
