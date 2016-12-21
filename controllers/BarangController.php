@@ -224,6 +224,11 @@ class BarangController extends Controller
         }
     }
 
+    public function actionPrint1Barcode($id, $barcode)
+    {
+        return $this->render('_print_barcode_1', ['id' => $id, 'barcode' => $barcode]);
+    }
+
     /**
      * Deletes an existing Barang model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

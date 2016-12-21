@@ -1,9 +1,5 @@
 <?php
 use yii\helpers\Html;
-use yii\widgets\DetailView;
-use yii\grid\GridView;
-use kartik\editable\Editable;
-use yii\helpers\Url;
 use barcode\barcode\BarcodeGenerator;
 
 $this->title = $model[0]->id_barang;
@@ -15,7 +11,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="btn-group margin-bottom-5">
         <?php
         echo Html::a('Home', ['view', 'id' => $model[0]->id_barang], ['class' => 'btn btn-sm btn-success']);
-        echo Html::a('Print', ['view', 'id' => $model[0]->id_barang], ['class' => 'btn btn-sm btn-primary']);?>
+        echo Html::a(
+            'Print',
+            ['print-1-barcode', 'id' => $model[0]->id_barang, 'barcode' => $model[0]->barcode],
+            ['class' => 'btn btn-sm btn-primary', 'target' => '_blank']
+        ); ?>
     </div>
 <?php
 if (count($model) > 0) {
