@@ -5,7 +5,6 @@ use Yii;
 use app\models\Barang;
 use app\models\BarangDetail;
 use app\models\Penjualan;
-use app\models\LogPenjualanDelete;
 use app\models\LogJualDetail;
 use app\models\PenjualanDetail;
 use app\models\PenjualanDetailSearch;
@@ -134,31 +133,51 @@ class PenjualanDetailController extends Controller
     {
         # Find Header penjualan
         $model = $this->findModel($id);
-        # Update Penjualan
-        $modelPenjualan = new Penjualan();
-        $recordPenjualan = $modelPenjualan->findOne(['id' => $model->id_penjualan]);
-        $recordPenjualan->subtotal = $recordPenjualan->subtotal - $model->subtotal;
-        $recordPenjualan->save(false);
-        # Update stock Barang
-        $modelBarang = new Barang();
-        $recordBarang = $modelBarang->findOne(['id' => $model->id_barang]);
-        if ($recordBarang !== '') {
-            $recordBarang->stock += $model->jml;
-            $recordBarang->save(false);
-        }
-        # update log
-        $modelLogBarangDelete = new LogPenjualanDelete();
-        $modelLogBarangDelete->id_penjualan = $model->id_penjualan;
-        $modelLogBarangDelete->id_barang = $model->id_barang;
-        $modelLogBarangDelete->jml = $model->jml;
-        $modelLogBarangDelete->harga = $model->harga;
-        $modelLogBarangDelete->subtotal = $model->subtotal;
-        $modelLogBarangDelete->tgl = date('Y-m-d H:i:s');
-        $modelLogBarangDelete->user_id = Yii::$app->user->identity->id;
-        $modelLogBarangDelete->save(false);
+        $idPenjualan = $model->id_penjualan;
+        $idBarang = $model->id_barang;
+        $harga = $model->harga;
+        $jml = $model->jml;
+        $subtotal = $model->subtotal;
         # Hapus detail barang
-        $this->findModel($id)->delete();
-        return $this->redirect(['create', 'id-jual' => $model->id_penjualan]);
+        if ((bool)$this->findModel($id)->delete() !== false) {
+            # Update Penjualan
+            $modelPenjualan = new Penjualan();
+            $recordPenjualan = $modelPenjualan->findOne(['id' => $idPenjualan]);
+            $recordPenjualan->subtotal -= $subtotal;
+            $recordPenjualan->update_date = date('Y-m-d H:i:s');
+            $recordPenjualan->save(false);
+            # Update stock Barang
+            $modelBarang = new Barang();
+            $recordBarang = $modelBarang->findOne(['id' => $idBarang]);
+            if ($recordBarang !== '') {
+                $recordBarang->stock += $jml;
+                $recordBarang->save(false);
+            }
+            # update log
+            $logData = [
+                'id_penjualan' => $idPenjualan,
+                'id_barang'    => $idBarang,
+                'jml'          => $jml,
+                'harga'        => $harga,
+                'subtotal'     => $subtotal,
+                'tgl'          => date('Y-m-d H:i:s'),
+                'user_id'      => Yii::$app->user->identity->id
+            ];
+            Yii::$app->db->createCommand()->insert(
+                'log_penjualan_delete',
+                $logData
+            )->execute();
+            #$modelLogBarangDelete->id_penjualan = $idPenjualan;
+            #$modelLogBarangDelete->id_barang = $idBarang;
+            #$modelLogBarangDelete->jml = $jml;
+            #$modelLogBarangDelete->harga = $harga;
+            #$modelLogBarangDelete->subtotal = $subtotal;
+            #$modelLogBarangDelete->tgl = date('Y-m-d H:i:s');
+            #$modelLogBarangDelete->user_id = Yii::$app->user->identity->id;
+            #$modelLogBarangDelete->load($logData);
+            #$modelLogBarangDelete->save(false);
+        }
+        return $this->redirect(['create', 'id-jual' => $idPenjualan]);
     }
 
     /**

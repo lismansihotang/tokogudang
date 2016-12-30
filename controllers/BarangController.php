@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use kartik\mpdf\Pdf;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
+use yii\filters\AccessControl;
 
 /**
  * BarangController implements the CRUD actions for Barang model.
@@ -27,7 +27,22 @@ class BarangController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only'  => ['logout', 'index', 'view-min-stock'],
+                'rules' => [
+                    [
+                        'allow'   => true,
+                        'actions' => ['login', 'logout'],
+                        'roles'   => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs'  => [
                 'class'   => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],

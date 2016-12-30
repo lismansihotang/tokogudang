@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use kartik\mpdf\Pdf;
 use yii\helpers\Json;
+use yii\filters\AccessControl;
 
 /**
  * PenjualanController implements the CRUD actions for Penjualan model.
@@ -28,7 +29,22 @@ class PenjualanController extends Controller
     public function behaviors()
     {
         return [
-            'verbs' => [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only'  => ['logout', 'index', 'short-create'],
+                'rules' => [
+                    [
+                        'allow'   => true,
+                        'actions' => ['login', 'logout'],
+                        'roles'   => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs'  => [
                 'class'   => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],

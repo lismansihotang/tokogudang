@@ -70,6 +70,10 @@ class Penjualan extends \yii\db\ActiveRecord
         return new PenjualanQuery(get_called_class());
     }
 
+    public function updatePenjualan()
+    {
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

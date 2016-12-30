@@ -16,7 +16,7 @@ $config = [
         'user'         => [
             'identityClass'   => 'app\models\User',
             'enableAutoLogin' => true,
-            'loginUrl'        => array('/user/login')
+            'loginUrl'        => ['/user/login']
         ],
         'authManager'  => [
             'class' => 'yii\rbac\DbManager',
@@ -55,17 +55,9 @@ $config = [
     ],
     'params'     => $params,
     'modules'    => [
-        'gridview'  => [
+        'gridview' => [
             'class' => '\kartik\grid\Module',
-        ],
-        'reportico' => [
-            'class'         => 'reportico\reportico\Module',
-            'controllerMap' => [
-                'reportico' => 'reportico\reportico\controllers\ReporticoController',
-                'mode'      => 'reportico\reportico\controllers\ModeController',
-                'ajax'      => 'reportico\reportico\controllers\AjaxController'
-            ]
-        ],
+        ]
     ],
 ];
 if (YII_ENV_DEV) {

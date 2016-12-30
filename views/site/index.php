@@ -41,4 +41,5 @@ $this->title = 'e-Warung POS';
         </div>
     </div>
 <?php
+#echo Yii::$app->timeZone;
 #shell_exec('D:/CashDrawer/run.exe');
