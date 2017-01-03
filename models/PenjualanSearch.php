@@ -87,22 +87,20 @@ class PenjualanSearch extends Penjualan
             // $query->where('0=1');
             return $dataProvider;
         }
-        // grid filtering conditions
-        $query->andFilterWhere(
-            [
-                'id'           => $this->id,
-                'tgl'          => $this->tgl,
-                'id_pelanggan' => $this->id_pelanggan,
-                'subtotal'     => $this->subtotal,
-                'disc'         => $this->disc,
-                'pajak'        => $this->pajak,
-                'total'        => $this->total,
-                'pembayaran'   => $this->pembayaran,
-            ]
-        );
         if (count($params) > 0) {
             $arrKey = array_keys($params);
-            $query->andFilterWhere(['between', 'tgl', $params[$arrKey[1]], $params[$arrKey[2]]]);
+            $dateFrom = $params[$arrKey[1]];
+            $dateTo = $params[$arrKey[2]];
+            $timezone = new \DateTimeZone('Asia/Jakarta');
+            $dateCreatedFrom = new \DateTime($dateFrom, $timezone);
+            $dateCreatedTo = new \DateTime($dateTo, $timezone);
+            $intervalDay = $dateCreatedFrom->diff($dateCreatedTo);
+            $diffDay = (integer)$intervalDay->format('%a');
+            if ($diffDay === 0) {
+                $query->filterWhere(['DATE(tgl)' => $dateFrom]);
+            } else {
+                $query->filterWhere(['between', 'DATE(tgl)', $dateFrom, $dateTo]);
+            }
         }
         return $dataProvider;
     }
