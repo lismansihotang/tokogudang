@@ -245,7 +245,7 @@ class PenjualanDetailController extends Controller
                 if ($recordBarang->stock >= $jmlBarang) {
                     $recordBarang->stock -= $jmlBarang;
                     #update tabel penjualan
-                    $recordPenjualan->subtotal += $model->subtotal;
+                    $recordPenjualan->subtotal += $subtotalBarang;
                     if ($model->save(false) && $recordPenjualan->save(false) && $recordBarang->save(false)) {
                         $newLogJualDetail = new LogJualDetail();
                         $newLogJualDetail->id_penjualan = $recordPenjualan->id;
