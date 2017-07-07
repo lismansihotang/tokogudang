@@ -2,15 +2,24 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
-use kartik\editable\Editable;
+use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use barcode\barcode\BarcodeGenerator;
+use kartik\editable\Editable;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Barang */
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Barang', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$tglAwal = '';
+$tglAkhir = '';
+$post = Yii::$app->request->post();
+if (count($post) > 0) {
+    $tglAwal = $post['tgl_awal'];
+    $tglAkhir = $post['tgl_akhir'];
+}
 ?>
     <div class="row">
         <div class="col-md-6">
@@ -114,6 +123,73 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]
             ); ?>
+        </div>
+
+        <?php
+        $form = ActiveForm::begin();
+        echo '<label class="control-label">Periode Laporan</label>';
+        echo DatePicker::widget(
+            [
+                'name'          => 'tgl_awal',
+                'name2'         => 'tgl_akhir',
+                'attribute'     => 'tgl_awal',
+                'attribute2'    => 'tgl_akhir',
+                'id'            => 'tgl_awal',
+                'value'         => $tglAwal,
+                'value2'        => $tglAkhir,
+                'options'       => ['placeholder' => 'Tgl. Awal'],
+                'options2'      => ['placeholder' => 'Tgl. Akhir'],
+                'type'          => DatePicker::TYPE_RANGE,
+                'pluginOptions' => [
+                    'format'    => 'yyyy-mm-dd',
+                    'autoclose' => true,
+                ]
+            ]
+        );
+        ?>
+        <div class="form-group">
+            <?php
+            echo Html::submitButton(
+                'Check Laporan',
+                ['class' => 'btn btn-primary margin-top-5 margin-right-5']
+            );
+            echo Html::button(
+                'Cetak Laporan',
+                ['class' => 'btn btn-success margin-top-5 margin-right-5', 'id' => 'cetak-laporan-2']
+            ); ?>
+        </div>
+        <?php
+        ActiveForm::end();
+        ?>
+        <div class="col-md-12">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>ID Penjualan</th>
+                    <th>Tgl</th>
+                    <th>Jumlah</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                if (count($transaksi) > 0) {
+                    $i = 1;
+                    foreach ($transaksi as $row) {
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>
+                            <td><?php echo $row['id']; ?></td>
+                            <td><?php echo $row['tgl']; ?></td>
+                            <td><?php echo $row['jml']; ?></td>
+                        </tr>
+                        <?php
+                        $i++;
+                    }
+                }
+                ?>
+                </tbody>
+            </table>
         </div>
     </div>
 <?php

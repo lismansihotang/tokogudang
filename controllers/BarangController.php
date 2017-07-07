@@ -101,11 +101,28 @@ class BarangController extends Controller
             return;
             #Yii::$app->response->redirect(Url::to(['barang/view', 'id' => Yii::$app->request->get('id')]), true);
         }
+        $recordTransaksi = (new \yii\db\Query())->select('penjualan.id, penjualan.tgl, penjualan_detail.jml')
+                                                ->from('penjualan')->innerJoin(
+                'penjualan_detail',
+                'penjualan.id=penjualan_detail.id_penjualan'
+            )->where('penjualan_detail.id_barang = "' . $id . '" ')->all();
+        if (Yii::$app->request->post('tgl_awal') !== '' AND Yii::$app->request->post('tgl_akhir') !== '') {
+            $recordTransaksi = (new \yii\db\Query())->select('penjualan.id, penjualan.tgl, penjualan_detail.jml')
+                                                    ->from('penjualan')->innerJoin(
+                    'penjualan_detail',
+                    'penjualan.id=penjualan_detail.id_penjualan'
+                )->where(
+                    'penjualan_detail.id_barang = "' . $id . '" AND (DATE(penjualan.tgl) BETWEEN "' . Yii::$app->request->post(
+                        'tgl_awal'
+                    ) . '" AND "' . Yii::$app->request->post('tgl_akhir') . '") '
+                )->all();
+        }
         return $this->render(
             'view',
             [
                 'model'        => $model,
-                'dataProvider' => $dataProvider
+                'dataProvider' => $dataProvider,
+                'transaksi'    => $recordTransaksi
             ]
         );
     }

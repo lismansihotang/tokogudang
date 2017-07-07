@@ -14,6 +14,7 @@ use Yii;
  * @property string $barcode
  * @property string $card_number
  * @property string $tgl_bergabung
+ * @property string $tipe
  */
 class Pelanggan extends \yii\db\ActiveRecord
 {
@@ -32,7 +33,7 @@ class Pelanggan extends \yii\db\ActiveRecord
     {
         return [
             [['nm_pelanggan'], 'required'],
-            [['alamat'], 'string'],
+            [['alamat', 'tipe'], 'string'],
             [['tgl_bergabung'], 'safe'],
             [['nm_pelanggan', 'barcode', 'card_number'], 'string', 'max' => 35],
             [['no_telp'], 'string', 'max' => 25],
@@ -52,6 +53,7 @@ class Pelanggan extends \yii\db\ActiveRecord
             'barcode' => 'Barcode',
             'card_number' => 'No. Kartu',
             'tgl_bergabung' => 'Tgl. bergabung',
+            'tipe' => 'Tipe Pelanggan',
         ];
     }
 

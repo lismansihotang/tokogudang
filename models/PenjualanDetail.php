@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use Yii;
@@ -11,11 +10,12 @@ use Yii;
  * @property integer $id_penjualan
  * @property integer $id_barang
  * @property integer $jml
- * @property string $harga
- * @property string $subtotal
+ * @property string  $harga
+ * @property string  $subtotal
  */
 class PenjualanDetail extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -42,12 +42,12 @@ class PenjualanDetail extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id'           => 'ID',
             'id_penjualan' => 'No. Pembelian',
-            'id_barang' => 'Nama Barang',
-            'jml' => 'Jml',
-            'harga' => 'Harga',
-            'subtotal' => 'Subtotal',
+            'id_barang'    => 'Nama Barang',
+            'jml'          => 'Jml',
+            'harga'        => 'Harga',
+            'subtotal'     => 'Subtotal',
         ];
     }
 
@@ -63,7 +63,8 @@ class PenjualanDetail extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBarang(){
-        return $this->hasOne(Barang::className(),['id'=>'id_barang']);
+    public function getBarang()
+    {
+        return $this->hasOne(Barang::className(), ['id' => 'id_barang']);
     }
 }

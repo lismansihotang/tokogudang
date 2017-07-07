@@ -225,7 +225,23 @@ class PenjualanDetailController extends Controller
             if (Yii::$app->request->get('jml') !== null) {
                 $jmlBarang = (integer)Yii::$app->request->get('jml');
             }
-            $subtotalBarang = $jmlBarang * $recordBarang['harga_jual'];
+            # Penentuan Harga Jual Barang
+            $hargaBeliBarang = $recordBarang['harga_beli'];
+            $hargaJualBarang = $recordBarang['harga_jual'];
+            if ($recordPenjualan->tipe_pelanggan !== 'Cash') {
+                switch ($recordPenjualan->tipe_pelanggan) {
+                    case 'Member':
+                        $hargaJualBarang = $recordBarang['harga_jual'] - ($recordBarang['harga_jual'] * (2 / 100));
+                        break;
+                    case 'Anggota Koperasi';
+                        $hargaJualBarang = $recordBarang['harga_jual'] - ($recordBarang['harga_jual'] * (2 / 100));
+                        break;
+                    case 'Grosir':
+                        $hargaJualBarang = $recordBarang['harga_jual'] - ($recordBarang['harga_jual'] * (2 / 100));
+                        break;
+                }
+            }
+            $subtotalBarang = $jmlBarang * $hargaJualBarang;
             if ($recordPenjualanDetail !== null) {
                 $model = $recordPenjualanDetail;
                 $model->subtotal = $recordPenjualanDetail->subtotal + $subtotalBarang;
@@ -235,7 +251,7 @@ class PenjualanDetailController extends Controller
                 $model = $modelPenjualanDetail;
                 $model->id_penjualan = Yii::$app->request->get('jual');
                 $model->id_barang = $recordBarangDetail['id_barang'];
-                $model->harga = $recordBarang['harga_jual'];
+                $model->harga = $hargaJualBarang;
                 $model->jml = $jmlBarang;
                 $model->subtotal = $subtotalBarang;
                 $model->barcode = $getBarcode;
@@ -247,13 +263,14 @@ class PenjualanDetailController extends Controller
                     #update tabel penjualan
                     $recordPenjualan->subtotal += $subtotalBarang;
                     if ($model->save(false) && $recordPenjualan->save(false) && $recordBarang->save(false)) {
-                        $newLogJualDetail = new LogJualDetail();
-                        $newLogJualDetail->id_penjualan = $recordPenjualan->id;
-                        $newLogJualDetail->tgl_penjualan = $recordPenjualan->tgl;
-                        $newLogJualDetail->id_barang = $recordBarangDetail['id_barang'];
-                        $newLogJualDetail->harga_beli = $recordBarang['harga_beli'];
-                        $newLogJualDetail->insert_date = date('Y-m-d H::i:s');
-                        $newLogJualDetail->save(false);
+                        $this->actionInsertLogPenjualanDetail(
+                            [
+                                'id'         => $recordPenjualan->id,
+                                'tgl'        => $recordPenjualan->tgl,
+                                'id_barang'  => $recordBarangDetail->id_barang,
+                                'harga_beli' => $hargaBeliBarang
+                            ]
+                        );
                         $data = ['msg' => 'Data Berhasil di simpan', 'redirect' => true];
                     } else {
                         $data = ['msg' => 'Data Gagal di simpan', 'redirect' => false];
@@ -266,5 +283,21 @@ class PenjualanDetailController extends Controller
             }
         }
         return Json::encode($data);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function actionInsertLogPenjualanDetail(array $data = [])
+    {
+        $newLogJualDetail = new LogJualDetail();
+        $newLogJualDetail->id_penjualan = $data['id'];
+        $newLogJualDetail->tgl_penjualan = $data['tgl'];
+        $newLogJualDetail->id_barang = $data['id_barang'];
+        $newLogJualDetail->harga_beli = $data['harga_beli'];
+        $newLogJualDetail->insert_date = date('Y-m-d H::i:s');
+        return (bool)$newLogJualDetail->save(false);
     }
 }

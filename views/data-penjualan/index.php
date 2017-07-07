@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Html;
-use yii\grid\GridView;
 use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
@@ -63,13 +62,14 @@ if (count($post) > 0) {
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th>No</th>
+                <th class="width-5">No</th>
                 <th>Tgl</th>
-                <th>Subtotal</th>
-                <th>Discount</th>
-                <th>Total</th>
-                <th>Pembayaran</th>
-                <th>Kembali</th>
+                <th class="width-5">Pembayaran</th>
+                <th class="width-5">Subtotal</th>
+                <th class="width-5">Discount</th>
+                <th class="width-5">Total</th>
+                <th class="width-5">Pembayaran</th>
+                <th class="width-5">Kembali</th>
             </tr>
             </thead>
             <tbody>
@@ -84,8 +84,9 @@ if (count($post) > 0) {
                 foreach ($model as $row) {
                     ?>
                     <tr>
-                        <td><?php echo $i; ?></td>
+                        <td class="text-center"><?php echo $i; ?></td>
                         <td><?php echo $row->tgl; ?></td>
+                        <td class="text-center"><?php echo $row->tipe_bayar; ?></td>
                         <td class="text-right"><?php echo number_format($row->subtotal); ?></td>
                         <td class="text-right"><?php echo number_format($row->disc); ?></td>
                         <td class="text-right"><?php echo number_format($row->total); ?></td>

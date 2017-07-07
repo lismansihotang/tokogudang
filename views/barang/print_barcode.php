@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
 if (count($model) > 0) {
     foreach ($model as $row) {
+        echo $row->barcode;
         echo '<div id="barcode-view-' . $row->barcode . '"></div>';
         $option = ['elementId' => 'barcode-view-' . $row->barcode, 'value' => $row->barcode, 'type' => 'ean13'];
         echo BarcodeGenerator::widget($option);

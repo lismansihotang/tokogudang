@@ -37,6 +37,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 'desc',
             ],
         ]
-    ); ?>
-
+    );
+    ?>
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama Barang</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        echo '<h1>' . count($dataBarang) . '</h1>';
+        if (count($dataBarang) > 0) {
+            $i = 1;
+            foreach ($dataBarang as $row) {
+                ?>
+                <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $row->nm_barang; ?></td>
+                </tr>
+                <?php
+                $i++;
+            }
+        }
+        ?>
+        </tbody>
+    </table>
 </div>

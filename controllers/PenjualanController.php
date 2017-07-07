@@ -101,6 +101,13 @@ class PenjualanController extends Controller
             $model->user_id = Yii::$app->user->identity->id;
             $model->tgl .= ' ' . date('H:i:s');
             $model->insert_date = date('Y-m-d H:i:s');
+            $modelPelanggan = new Pelanggan();
+            $recordPelanggan = $modelPelanggan->findOne(['id' => $model->id_pelanggan]);
+            $tipePelanggan = 'Cash';
+            if (count($recordPelanggan) > 0) {
+                $tipePelanggan = $recordPelanggan['tipe'];
+            }
+            $model->tipe_pelanggan = $tipePelanggan;
             $model->save();
             //return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(['penjualan-detail/create', 'id-jual' => $model->id]);
@@ -132,6 +139,7 @@ class PenjualanController extends Controller
             $model->tgl = date('Y-m-d H:i:s');
             $model->insert_date = date('Y-m-d H:i:s');
             $model->id_pelanggan = '1';
+            $model->tipe_pelanggan = 'Cash';
             $model->save();
             $idPenjualan = $model->id;
         }
@@ -243,7 +251,35 @@ class PenjualanController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if ((bool)$this->findModel($id)->delete() !== false) {
+            $model = new PenjualanDetail();
+            $data = $model->findAll(['id_penjualan' => $id]);
+            if (count($data) > 0) {
+                foreach ($data as $row) {
+                    # Update stock Barang
+                    $modelBarang = new Barang();
+                    $recordBarang = $modelBarang->findOne(['id' => $row->id_barang]);
+                    if ($recordBarang !== '') {
+                        $recordBarang->stock += $row->jml;
+                        $recordBarang->save(false);
+                    }
+                    # update log
+                    $logData = [
+                        'id_penjualan' => $id,
+                        'id_barang'    => $row->id_barang,
+                        'jml'          => $row->jml,
+                        'harga'        => $row->harga,
+                        'subtotal'     => $row->subtotal,
+                        'tgl'          => date('Y-m-d H:i:s'),
+                        'user_id'      => Yii::$app->user->identity->id
+                    ];
+                    Yii::$app->db->createCommand()->insert(
+                        'log_penjualan_delete',
+                        $logData
+                    )->execute();
+                }
+            }
+        }
         return $this->redirect(['index']);
     }
 

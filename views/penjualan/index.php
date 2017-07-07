@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $gridColumns = [
         ['class' => 'kartik\grid\SerialColumn'],
+        'id',
         'pelanggan.nm_pelanggan',
         'tgl',
         ['attribute' => 'subtotal', 'format' => ['decimal', 2], 'hAlign' => 'right', 'width' => '110px'],
@@ -25,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ['attribute' => 'total', 'format' => ['decimal', 2], 'hAlign' => 'right', 'width' => '110px'],
         [
             'class'    => 'kartik\grid\ActionColumn',
-            'template' => '{view}'
+            'template' => '{view}{delete}'
         ]
     ];
     echo GridView::widget(

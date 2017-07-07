@@ -10,13 +10,14 @@ $idJual = Yii::$app->request->get('id');
 /* @var $form yii\widgets\ActiveForm */
 ?>
     <div class="penjualan-form">
+        <h1 id="saldo-pelanggan"></h1>
         <?php
         echo Html::a(
             '<span class="glyphicon glyphicon-home"> </span> Kembali ke Transaksi',
             Url::to('index.php?r=penjualan-detail/create&id-jual=' . $idJual),
             [
                 'class' => 'btn btn-sm btn-warning',
-                'id'    => 'modalButton'
+                'id' => 'modalButton'
             ]
         );
         $form = ActiveForm::begin(['id' => 'form_penjualan']);
@@ -28,9 +29,9 @@ $idJual = Yii::$app->request->get('id');
             MaskedInput::className(),
             [
                 'clientOptions' => [
-                    'alias'              => 'decimal',
-                    'groupSeparator'     => ',',
-                    'autoGroup'          => true,
+                    'alias' => 'decimal',
+                    'groupSeparator' => ',',
+                    'autoGroup' => true,
                     'removeMaskOnSubmit' => true,
                 ]
             ]
@@ -39,9 +40,9 @@ $idJual = Yii::$app->request->get('id');
             MaskedInput::className(),
             [
                 'clientOptions' => [
-                    'alias'              => 'decimal',
-                    'groupSeparator'     => ',',
-                    'autoGroup'          => true,
+                    'alias' => 'decimal',
+                    'groupSeparator' => ',',
+                    'autoGroup' => true,
                     'removeMaskOnSubmit' => true,
                 ]
             ]
@@ -51,16 +52,16 @@ $idJual = Yii::$app->request->get('id');
             MaskedInput::className(),
             [
                 'clientOptions' => [
-                    'alias'              => 'decimal',
-                    'groupSeparator'     => ',',
-                    'autoGroup'          => true,
+                    'alias' => 'decimal',
+                    'groupSeparator' => ',',
+                    'autoGroup' => true,
                     'removeMaskOnSubmit' => true,
                 ]
             ]
         );
         ?>
         <h1 id="v-total"></h1>
-        <input type="hidden" id="getNominal" />
+        <input type="hidden" id="getNominal"/>
 
         <div class="form-group">
             <?php echo Html::submitButton(
@@ -152,6 +153,7 @@ $('#card_number').keypress(function(e){
                         window.location=data.url;
                     }
                     $('#getNominal').val(getNominal);
+                    $('#saldo-pelanggan').html('Saldo Anda : '+formatMoney(getNominal));
                 }
            },
            error: function(){

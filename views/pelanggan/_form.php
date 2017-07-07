@@ -10,27 +10,38 @@ use kartik\date\DatePicker;
 
     <div class="pelanggan-form">
 
-        <?php $form = ActiveForm::begin();
-        echo $form->field($model, 'nm_pelanggan')->textInput(['maxlength' => true]);
-        echo $form->field($model, 'alamat')->textarea(['rows' => 6]);
-        echo $form->field($model, 'no_telp')->textInput(['maxlength' => true]);
-        echo $form->field($model, 'barcode')->textInput(['maxlength' => true]);
-        echo $form->field($model, 'card_number')->textInput(
-            ['maxlength' => true, 'id' => 'card_number', 'placeholder' => 'Input atau Scan No Kartu']
-        );
-        echo $form->field($model, 'tgl_bergabung')->widget(
+        <?php $form = ActiveForm::begin(); ?>
+
+        <?= $form->field($model, 'nm_pelanggan')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'alamat')->textarea(['rows' => 6]) ?>
+
+        <?= $form->field($model, 'no_telp')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'barcode')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'card_number')->textInput(
+            ['maxlength' => true, 'placeholder' => 'Input atau Scan kartu anggota']
+        ) ?>
+
+        <?= $form->field($model, 'tgl_bergabung')->widget(
             DatePicker::className(),
             [
-                'options'       => ['placeholder' => 'Pilih Tanggal Bergabung', 'value' => date('Y-m-d')],
+                'options' => ['placeholder' => 'Pilih Tanggal Bergabung', 'value' => date('Y-m-d')],
                 'pluginOptions' => ['autoClose' => true, 'format' => 'yyyy-mm-dd'],
             ]
-        ); ?>
+        ) ?>
+
+        <?= $form->field($model, 'tipe')->dropDownList(
+            ['Cash' => 'Cash', 'Member' => 'Member', 'Anggota Koperasi' => 'Anggota Koperasi', 'Grosir' => 'Grosir',],
+            ['prompt' => '']
+        ) ?>
 
         <div class="form-group">
-            <?php echo Html::submitButton(
+            <?= Html::submitButton(
                 $model->isNewRecord ? 'Create' : 'Update',
                 ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
-            ); ?>
+            ) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

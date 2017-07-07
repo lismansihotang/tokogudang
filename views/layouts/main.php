@@ -30,8 +30,8 @@ AppAsset::register($this);
                     '@web/images/logo-3.png',
                     ['alt' => Yii::$app->name]
                 ) . ' e-Warung <small><kbd>POS</kbd></small>',
-            'brandUrl'   => Yii::$app->homeUrl,
-            'options'    => [
+            'brandUrl' => Yii::$app->homeUrl,
+            'options' => [
                 'class' => 'navbar-default navbar-fixed-top',
             ],
         ]
@@ -40,8 +40,8 @@ AppAsset::register($this);
         echo Nav::widget(
             [
                 'encodeLabels' => false,
-                'options'      => ['class' => 'navbar-nav navbar-right'],
-                'items'        => [
+                'options' => ['class' => 'navbar-nav navbar-right'],
+                'items' => [
                     ['label' => '<span class="glyphicon glyphicon-home"> </span> Home', 'url' => ['/site/index']],
                     ['label' => '<span class="glyphicon glyphicon-log-in"> </span> Login', 'url' => ['/site/login']]
                 ]
@@ -51,8 +51,8 @@ AppAsset::register($this);
         echo Nav::widget(
             [
                 'encodeLabels' => false,
-                'options'      => ['class' => 'navbar-nav navbar-right'],
-                'items'        => [
+                'options' => ['class' => 'navbar-nav navbar-right'],
+                'items' => [
                     ['label' => '<span class="glyphicon glyphicon-home"> </span> Home', 'url' => ['/site/index']],
                     [
                         'label' => '<span class="glyphicon glyphicon-shopping-cart"> </span> Transaksi',
@@ -60,16 +60,50 @@ AppAsset::register($this);
                             ['label' => 'Penjualan', 'url' => ['penjualan/index']],
                             '<li class="divider"></li>',
                             ['label' => 'Mutasi Stock', 'url' => ['barang-mutasi-stock/index']],
+                            '<li class="divider"></li>',
+                            ['label' => 'Barang Stock Gudang', 'url' => ['barang-stock-gudang/index']],
                         ],
                     ],
                     [
                         'label' => '<span class="glyphicon glyphicon-th"> </span> Laporan',
                         'items' => [
                             ['label' => 'Data Penjualan', 'url' => ['data-penjualan/index']],
+                            ['label' => 'Penjualan per Barang', 'url' => ['data-penjualan/index-items']],
+                            [
+                                'label' => 'Penjualan per Kategori Barang',
+                                'url' => ['data-penjualan/index-items-kategori']
+                            ],
                             ['label' => 'List Stock Barang', 'url' => ['barang/view-stock']],
+                            ['label' => 'List Barang by Scan', 'url' => ['data-penjualan/list-items-by-scan']],
                             ['label' => 'Mutasi Stock', 'url' => ['lap-mutasi-stock/index']],
                             '<li class="divider"></li>',
-                            ['label' => 'Summary', 'url' => ['lap-summary/index']]
+                            ['label' => 'Summary', 'url' => ['lap-summary/index']],
+                            '<li class="divider"></li>',
+                            [
+                                'label' => 'Penjualan berdasarkan User',
+                                'url' => ['data-penjualan/index-penjualan-user']
+                            ],
+                            [
+                                'label' => 'Penjualan berdasarkan User/Barang',
+                                'url' => ['data-penjualan/index-items-user']
+                            ],
+                            [
+                                'label' => 'Penjualan berdasarkan User/Barang',
+                                'url' => ['data-penjualan/index-items-user']
+                            ],
+                            '<li class="divider"></li>',
+                            ['label' => 'List Harga Barang dengan scan', 'url' => ['data-penjualan/list-price-item']],
+                            '<li class="divider"></li>',
+                            ['label' => 'Persediaan Barang', 'url' => ['data-penjualan/list-persediaan-barang']],
+                            ['label' => 'Persediaan Barang /Kategori', 'url' => ['data-penjualan/list-persediaan-barang-by-kategori']],
+                        ],
+                    ],
+                    [
+                        'label' => '<span class="glyphicon glyphicon-th"> </span> Petty Cash',
+                        'items' => [
+                            ['label' => 'Petty Cash', 'url' => ['petty-cash/index']],
+                            '<li class="divider"></li>',
+                            ['label' => 'Kategori', 'url' => ['petty-cash-kategori/index']],
                         ],
                     ],
                     [
@@ -83,12 +117,14 @@ AppAsset::register($this);
                             ['label' => 'Satuan Barang', 'url' => ['satuan-kecil/index']],
                             ['label' => 'Satuan Pembelian', 'url' => ['satuan-besar/index']],
                             '<li class="divider"></li>',
+                            ['label' => 'Anggota Koperasi', 'url' => ['pelanggan/index']],
+                            '<li class="divider"></li>',
                             ['label' => 'Pengguna', 'url' => ['sys-user/index']],
                         ],
                     ],
                     [
                         'label' => '<span class="glyphicon glyphicon-log-out"> </span> Logout(' . Yii::$app->user->identity->username . ')',
-                        'url'   => ['/site/logout']
+                        'url' => ['/site/logout']
                     ]
                 ],
             ]
