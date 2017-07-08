@@ -64,6 +64,7 @@ class PelangganSearch extends Pelanggan
         ]);
 
         $query->andFilterWhere(['like', 'nm_pelanggan', $this->nm_pelanggan])
+            ->andFilterWhere(['<>', 'nm_pelanggan', '#CASH'])
             ->andFilterWhere(['like', 'alamat', $this->alamat])
             ->andFilterWhere(['like', 'no_telp', $this->no_telp])
             ->andFilterWhere(['like', 'barcode', $this->barcode])

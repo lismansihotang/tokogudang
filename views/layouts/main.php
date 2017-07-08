@@ -107,6 +107,12 @@ AppAsset::register($this);
                         ],
                     ],
                     [
+                        'label' => '<span class="glyphicon glyphicon-th"> </span> Customer',
+                        'items' => [
+                            ['label' => 'Index Data', 'url' => ['pelanggan/index']],
+                        ],
+                    ],
+                    [
                         'label' => '<span class="glyphicon glyphicon-wrench"> </span> Master Data',
                         'items' => [
                             ['label' => 'Barang', 'url' => ['barang/index']],
@@ -116,8 +122,6 @@ AppAsset::register($this);
                             '<li class="divider"></li>',
                             ['label' => 'Satuan Barang', 'url' => ['satuan-kecil/index']],
                             ['label' => 'Satuan Pembelian', 'url' => ['satuan-besar/index']],
-                            '<li class="divider"></li>',
-                            ['label' => 'Anggota Koperasi', 'url' => ['pelanggan/index']],
                             '<li class="divider"></li>',
                             ['label' => 'Pengguna', 'url' => ['sys-user/index']],
                         ],

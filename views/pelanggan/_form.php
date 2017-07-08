@@ -21,7 +21,7 @@ use kartik\date\DatePicker;
         <?= $form->field($model, 'barcode')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'card_number')->textInput(
-            ['maxlength' => true, 'placeholder' => 'Input atau Scan kartu anggota']
+            ['maxlength' => true, 'placeholder' => 'Input atau Scan kartu anggota', 'id' => 'card_number']
         ) ?>
 
         <?= $form->field($model, 'tgl_bergabung')->widget(

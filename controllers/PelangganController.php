@@ -55,8 +55,18 @@ class PelangganController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $saldo = 0;
+        $modelPelangganQuota = new PelangganQuota();
+        $record = $modelPelangganQuota->findOne(['pelanggan_id' => $model->id]);
+        if (count($record) > 0) {
+            $saldo = $record->nominal;
+        }
+        $modelPenjualan = new Penjualan();
+        $recordPenjualan = $modelPenjualan->find()->where(['id_pelanggan' => $model->id])
+            ->orWhere(['card_number' => $model->card_number])->all();
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model, 'saldo' => $saldo, 'modelPenjualan' => $recordPenjualan
         ]);
     }
 
@@ -132,11 +142,11 @@ class PelangganController extends Controller
     public function actionCheckCardMember()
     {
         $data = [
-            'result'  => false,
-            'msg'     => 'No. Kartu ini tidak teregistrasi dalam sistem',
+            'result' => false,
+            'msg' => 'No. Kartu ini tidak teregistrasi dalam sistem',
             'nominal' => '0',
-            'url'     => '',
-            'subtotal'   => '0'
+            'url' => '',
+            'subtotal' => '0'
         ];
         if (Yii::$app->request->isAjax === true) {
             $modelPelanggan = new Pelanggan();
@@ -156,11 +166,11 @@ class PelangganController extends Controller
                     $subtotal = $recordPenjualan->subtotal;
                 }
                 $data = [
-                    'result'  => true,
-                    'msg'     => 'No. Kartu ini teregistrasi dalam sistem',
+                    'result' => true,
+                    'msg' => 'No. Kartu ini teregistrasi dalam sistem',
                     'nominal' => $nominal,
-                    'url'     => $url,
-                    'subtotal'   => $subtotal
+                    'url' => $url,
+                    'subtotal' => $subtotal
                 ];
             }
         }

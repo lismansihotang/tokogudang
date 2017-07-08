@@ -31,9 +31,9 @@ class PelangganQuota extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['pelanggan_id'], 'required'],
             [['pelanggan_id', 'user_insert', 'user_update'], 'integer'],
-            [['nominal'], 'number'],
-            [['insert_date', 'update_date'], 'safe'],
+            [['insert_date', 'update_date', 'nominal'], 'safe'],
         ];
     }
 
